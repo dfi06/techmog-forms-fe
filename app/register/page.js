@@ -12,7 +12,7 @@ const page = () => {
             <Input></Input>
             <Label>Enter password</Label>
             <Input></Input>
-            <Button>Login</Button>
+            <Button>Register</Button>
         </form>
     </div>
   )
