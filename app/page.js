@@ -1,10 +1,19 @@
+'use client'
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
+  const [forms, setForms] = useState([])
+
+  const fetchForms = () => {
+    setForms(prev => [...prev, {id: Math.random(), title: "NewForm"}])
+  }
+  const makeNewForm = () => {
+
+  }
   return (
-    <div className="">
-      <div className="h-[60vh] flex flex-col py-20 bg-blue-400 text-white w-full gap-16 justify-center">
+    <div>
+      <div className="h-[65vh] flex flex-col py-20 border-y-2 border-gray-500 bg-blue-400 text-white w-full gap-16 justify-center">
         <div className="flex gap-32 justify-center">
           <div className="space-y-4">
             <h1 className="font-bold text-4xl">Welcome</h1>
@@ -21,10 +30,15 @@ export default function Home() {
           <Button variant='white'>Register</Button>
         </div>
       </div>
-
+      <div className="w-full h-10 shadow-2xl rotate-180 relative z-50"></div>
       <div>
+        <Button onClick={makeNewForm}>Make a form</Button>
         Forms:
+        {forms.map((f, i) => {
+          <div>
 
+          </div>
+        })}
       </div>
       
       
