@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { Toaster } from "@/components/ui/sonner"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,7 +20,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning={true}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
@@ -29,7 +30,7 @@ export default function RootLayout({ children }) {
         <div className="min-h-screen">
           {children}
         </div>
-        
+        <Toaster />
         <Link href="https://github.com/dfi06" className="w-full h-40 bg-blue-400 p-16 flex flex-col  text-center">
           made w ♡ 
           <div>{`click me for my github`}</div>
