@@ -14,13 +14,14 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import Link from 'next/link'
 
 
 const Page = () => {
-  const [qArr, setQArr] = useState([])
+  const [questionsArr, setQuestionsArr] = useState([])
   const addNewQ = () => {
     
-    setQArr(prev => [...prev, {question_id: crypto.randomUUID(), type:"Multiple Choice", options:["Option 1", "Option 2"], required: true, answer: null, question_text: "Hi, answer pls:", correctAnswerIndex: 0}])
+    setQuestionsArr(prev => [...prev, {question_id: crypto.randomUUID(), type:"Multiple Choice", options:["Option 1", "Option 2"], required: true, answer: null, question_text: "Hi, answer pls:", correctAnswerIndex: 0}])
   }
 
   
@@ -28,7 +29,7 @@ const Page = () => {
   const questionTypes = ["Multiple Choice", "Short Answer", "Checkbox", "Dropdown"]
 
   const updateType = (question_id, newType) => {
-    setQArr(prev =>
+    setQuestionsArr(prev =>
       prev.map(q =>
         q.question_id === question_id ? { ...q, type: newType } : q
       )
@@ -36,7 +37,7 @@ const Page = () => {
   };
 
   const updateRequired = (question_id, bool_checked) => {
-    setQArr((prev) =>
+    setQuestionsArr((prev) =>
       prev.map((q) =>
         q.question_id === question_id
           ? { ...q, required: bool_checked }
@@ -46,7 +47,7 @@ const Page = () => {
   };
 
   const addOption = (question_id) => {
-    setQArr(prev =>
+    setQuestionsArr(prev =>
       prev.map(q =>
         q.question_id === question_id
           ? { ...q, options: [...q.options, `Option ${q.options.length + 1}`] }
@@ -55,7 +56,7 @@ const Page = () => {
     );
   }
   const updateOption = (question_id, index_to_update, new_value) => {
-    setQArr(prev => 
+    setQuestionsArr(prev => 
       prev.map(q =>
         q.question_id === question_id ? {...q, options: q.options.map((o,i) => i === index_to_update ? new_value : o)}
         : q
@@ -63,7 +64,7 @@ const Page = () => {
     )
   } 
   const deleteOption = (question_id, index_to_remove) => {
-    setQArr(prev => 
+    setQuestionsArr(prev => 
       prev.map(q => 
       q.question_id === question_id ?  
       {...q, options: q.options.filter((_,i) => i !== index_to_remove)}
@@ -74,7 +75,7 @@ const Page = () => {
   }
   
   const updateQuestionText = (question_id, new_value) => {
-    setQArr(prev => 
+    setQuestionsArr(prev => 
       prev.map(q =>
         q.question_id === question_id ?
           {...q, question_text: new_value} 
@@ -84,7 +85,7 @@ const Page = () => {
   }
 
   const updateCorrectAnswer = (question_id, index_to_update) => {
-  setQArr(prev =>
+  setQuestionsArr(prev =>
     prev.map(q =>
       q.question_id === question_id
         ? { ...q, correctAnswerIndex: index_to_update }
@@ -95,7 +96,9 @@ const Page = () => {
 
   return (
     <div>
-        {qArr.length !== 0 ? qArr.map((q, i) => (
+        <Link href="/"><Button>Back</Button></Link>
+        <Link href="/"><Button>Delete this form?</Button></Link>
+        {questionsArr.length !== 0 ? questionsArr.map((q, i) => (
           <div key={q.question_id} className='min-h-60 border-5 border-blue-500 text-white'>
             <div className='inline-flex w-full gap-2'>
               <Label htmlFor={`${q.question_id}`}>Is this question required?</Label>  <Checkbox id={`${q.question_id}`} checked={q.required} onCheckedChange={(checked)=>updateRequired(q.question_id, checked)} />
