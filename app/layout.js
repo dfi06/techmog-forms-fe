@@ -39,10 +39,11 @@ export default function RootLayout({ children }) {
           {children}
         </div>
         <Toaster />
-        <Link id="footer" href="https://github.com/dfi06" className="w-full h-40 bg-blue-400 p-16 flex flex-col  text-center">
-          ui is n̶o̶t̶ my passion, made w ♡ 
-          <div>{`click me for my github`}</div>
-        </Link >
+        <div id="footer"  className="w-full h-40 bg-blue-400 p-16 flex flex-col  text-center">
+          made w ♡ 
+          <Link href="https://github.com/dfi06">{`click me for my github`}</Link>
+          <div className="text-blue-400">ui is n̶o̶t̶ my passion</div>
+        </div >
       </body>
       
     </html>
