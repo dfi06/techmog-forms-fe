@@ -129,3 +129,14 @@
 .font-sora {
   font-family: var(--font-sora);
 }
+
+.neobrutal {
+  border: 2px solid #000;
+  box-shadow: 8px 8px 0 0 #000;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.neobrutal:hover {
+  transform: translate(4px, 4px);
+  box-shadow: 4px 4px 0 0 #000;
+}

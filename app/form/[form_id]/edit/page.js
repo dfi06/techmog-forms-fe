@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { toast } from "sonner"
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import {
   Combobox,
   ComboboxContent,
@@ -17,7 +17,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import Link from 'next/link'
 
 
-const Page = () => {
+const Page = ({params}) => {
+  const { form_id } = use(params)
   const [questionsArr, setQuestionsArr] = useState([])
   const addNewQ = () => {
     
@@ -96,8 +97,8 @@ const Page = () => {
 
   return (
     <div>
-        <Link href="/"><Button>Back</Button></Link>
-        <Link href="/"><Button>Delete this form?</Button></Link>
+        <Link href={`/form/${form_id}/peek`}><Button>Back</Button></Link>
+        
         {questionsArr.length !== 0 ? questionsArr.map((q, i) => (
           <div key={q.question_id} className='min-h-60 border-5 border-blue-500 text-white'>
             <div className='inline-flex w-full gap-2'>

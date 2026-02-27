@@ -4,11 +4,15 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react"
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter()
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
-
+  const [formsArr, setFormsArr] = useState([])
+  const [searchQuery, setSearchQuery] = useState("")
+  
 
   useEffect(()=>{
       const token = localStorage.getItem('token');
@@ -20,27 +24,51 @@ export default function Home() {
           }
           return res.json()
       }).then(data => {
-          if(data) setUser(data.user)
-              
+          if(data) setUser(data.user);
           setLoading(false)
       })
+
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/form/all`, {
+      }).then(res => res.json())
+      .then(data => {
+          if(data) {
+            setFormsArr(data.forms)
+          }
+      })
+
   }, [])
 
-  const [formsArr, setFormsArr] = useState([])
-  const [newFormTitle, setNewFormTitle] = useState("")
+  const handleSearch = async() => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/form/search?q=${searchQuery}`
+    )
+    const data = await res.json()
 
-  const makeNewForm = () => {
-    setFormsArr(prev => [...prev, {form_id: crypto.randomUUID(), title: newFormTitle}])
+    if (data.forms) {
+      setFormsArr(data.forms)
+    }
   }
 
-  const deleteForm = (form_id) => {
-    setFormsArr(prev => prev.filter(f => f.form_id != form_id))
+  const makeNewForm = async () => {
+    const token = localStorage.getItem('token');
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/form/create`, {
+      body: JSON.stringify({ owner_id: user?._id}),
+      method: "POST",
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }  
+    }).then(res => res.json())
+    .then(data => {
+      if(data) router.push(`/form/${data?.form_id}/edit`)
+    })
   }
 
   const handleLogout = async () => {
     localStorage.removeItem('token');
     setUser(null)
   }
+
   return (
     <div>
       <div className=" h-[65vh] flex flex-col py-20 border-y-2 border-gray-500 bg-blue-400 text-white w-full gap-16 justify-center">
@@ -75,8 +103,8 @@ export default function Home() {
             >
               🫴
             </motion.div>
-            <div>
-              <h1 className="-tracking-[0.085em] font-bold text-6xl">Techmog </h1>
+            <div >
+              <h1 className="-tracking-[0.085em] font-bold text-6xl ">Techmog </h1>
               <h1 className="-tracking-[0.085em] font-bold text-6xl">Forms.</h1>
             </div>
             <motion.div 
@@ -115,17 +143,21 @@ export default function Home() {
         </div>
       </div>
       <div className="w-full h-10 shadow-2xl rotate-180 relative z-50"/>
-      <Input value={newFormTitle} onChange={(e) => setNewFormTitle(prev => e.target.value)} placeholder="Type your form name here!"></Input>
-      <Button onClick={makeNewForm}>Make a form</Button>
+      {user ? (
+            <Button onClick={makeNewForm}>Make a form</Button>
+          ) : (
+            <div>Please log in to make a form</div>
+          )
+          }
+      <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}></Input><Button onClick={handleSearch}>Search</Button>
       <div id="forms">Forms:</div>
         {formsArr.length !== 0 ? formsArr.map((form, i) => (
           <div key={i} className="min-h-60 border-5 border-blue-500">
             {form.title}
-            <div>
-              <div><Link href={`form/${form.form_id}/peek`}><Button>Peek</Button></Link><Link href={`form/${form.form_id}/edit`}><Button>Edit</Button></Link></div>
+            <>
+              <div><Link href={`form/${form._id}/peek`}><Button>Peek</Button></Link></div>
               <Link href={`form/${form.form_id}/attempt`}><Button>Start</Button></Link>
-              <Button onClick={() => deleteForm(form.form_id)}>Delete</Button> 
-            </div>
+            </>
             
           </div>
         )): "No forms yet"}
