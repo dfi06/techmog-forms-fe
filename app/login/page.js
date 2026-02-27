@@ -3,24 +3,42 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
+import { toast } from "sonner"
 
 const Page = () => {
+  const router = useRouter()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
 
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/login`, {
-      body: JSON.stringify({username,password}),
-      headers: {
-        'Content-Type': "application/json" 
-      },
-      credentials: "include",
-      method: "POST"
-    })
-    
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ username, password }),
+        }
+      )
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        toast.error(data.message || "Login failed")
+        return
+      }
+
+      toast.success("Logged in successfully")
+      router.push("/")
+
+    } catch (err) {
+      toast.error("Network error")
+    }
   }
 
   return (
