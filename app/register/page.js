@@ -47,9 +47,9 @@ const Page = () => {
         <Link href="/"><Button>Back</Button></Link>
         <form onSubmit={handleRegister}>
             <Label>Enter username</Label>
-            <Input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Type your username here!"></Input>
+            <Input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Type your username here!" required></Input>
             <Label>Enter password</Label>
-            <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Type your password here!"></Input>
+            <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Type your password here!" required></Input>
             <Button>Register</Button>
         </form>
     </div>

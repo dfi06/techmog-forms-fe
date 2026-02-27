@@ -41,14 +41,21 @@ const Page = () => {
     }
   }
 
+  const handleLogout = async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/logout`, {
+      method: "POST",
+      credentials: "include"
+    });
+  }
+
   return (
     <div>
         <Link href="/"><Button>Back</Button></Link>
         <form onSubmit={handleLogin}>
             <Label>Enter username</Label>
-            <Input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Type your username here!"></Input>
+            <Input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Type your username here!" required></Input>
             <Label>Enter password</Label>
-            <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Type your password here!"></Input>
+            <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Type your password here!" required></Input>
             <Button>Login</Button>
         </form>
     </div>
