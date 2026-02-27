@@ -97,14 +97,19 @@ export default function Home() {
           
         </div>
         <div className="space-x-8 self-center mx-auto">
-          {!user ? (
+          {loading ? (
+            <div>be patient pls</div>
+          ) :
+          !user ? (
             <>
               <Link href="/login"><Button variant='darkblue'>Login</Button></Link>
               <Link href="/register"><Button variant='white'>Register</Button></Link>
             </>
           ) : (
             <Button variant='destructive' onClick={handleLogout} className="w-28">Logout</Button>
-          )}
+          )
+          }
+          
           
           
         </div>
