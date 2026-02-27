@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from "sonner"
 
 const Page = () => {
@@ -21,12 +21,15 @@ const Page = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          credentials: "include",
           body: JSON.stringify({ username, password }),
         }
       )
 
       const data = await res.json()
+
+      if (res.ok && data.token) {
+        localStorage.setItem('token', data.token);
+      }
 
       if (!res.ok) {
         toast.error(data.message || "Login failed")
@@ -41,12 +44,10 @@ const Page = () => {
     }
   }
 
-  const handleLogout = async () => {
-    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/logout`, {
-      method: "POST",
-      credentials: "include"
-    });
-  }
+
+  useEffect(()=>{
+    localStorage.removeItem('token');
+  },[])
 
   return (
     <div>

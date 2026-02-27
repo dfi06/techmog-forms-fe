@@ -10,8 +10,9 @@ const Page = () => {
 
 
     useEffect(()=>{
+        const token = localStorage.getItem('token');
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/me`, {
-            credentials: "include"
+            headers: { Authorization: `Bearer ${token}` }
         }).then(res => {
             if (!res.ok){
                 router.push('/login')

@@ -11,8 +11,9 @@ export default function Home() {
 
 
   useEffect(()=>{
+      const token = localStorage.getItem('token');
       fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/me`, {
-          credentials: "include"
+          headers: { Authorization: `Bearer ${token}` }
       }).then(res => {
           if (!res.ok){
               return null
@@ -37,10 +38,7 @@ export default function Home() {
   }
 
   const handleLogout = async () => {
-    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/logout`, {
-      method: "POST",
-      credentials: "include"
-    });
+    localStorage.removeItem('token');
     setUser(null)
   }
   return (
