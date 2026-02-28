@@ -77,13 +77,12 @@ const Page = ({ params }) => {
         <>
           <Link href={`/form/${form_id}/edit`}><Button>Edit</Button></Link>
           <Button onClick={handleDelete}>Delete</Button>
+          <Button>View responses</Button>
         </>
       ): ""}
-      
       <div>{form.title}</div>
-      <div>information about forms here</div>
-      <div>form itself but disabled</div>
-      <Button>View responses</Button>
+      
+
     </div>
   )
 }

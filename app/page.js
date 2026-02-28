@@ -75,11 +75,11 @@ export default function Home() {
 
   return (
     <div>
-        <div className=" h-[65vh] flex flex-col py-20 border-y-2 border-gray-500 bg-primary text-white w-full gap-16 justify-center">
+      <div className=" h-[65vh] flex flex-col py-20 border-y-2 border-gray-500 bg-primary text-white w-full gap-16 justify-center">
         <div className="flex gap-32 justify-center">
           <div className=" space-y-4">
             <h1 className="font-bold text-4xl ">Welcome, {user?.username}</h1>
-            <p className="w-[40ch] ">Make and submit forms. Techmog™ other chudmaxxing arch-cels. We provide the best in-house tools for creating forms. Usage of site may attract attention from foids, Techmog Forms is not liable for any unwanted conduct or damages. Site performance may vary due to 3rd party service limits</p>
+            <p className="w-[40ch] ">Make and submit forms. Techmog™ other chudmaxxing arch-cels. We provide the best in-house tools for creating forms. Usage of site may attract attention from foids, Techmog Forms is not liable for any unwanted conduct or damages. Site performance may vary due to 3rd party service limits.</p>
           </div>
           <motion.div 
             animate={{
@@ -147,9 +147,6 @@ export default function Home() {
         </div>
       </div>
       <div className="w-full h-10 shadow-2xl rotate-180 relative z-50"/>
-      
-          
-      
       <div id="forms" className=" mx-40 grid grid-cols-3 items-center">
         <div className="font-bold text-3xl">Forms:</div>
         <div className="flex gap-4">
