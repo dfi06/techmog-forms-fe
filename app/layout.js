@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
         <div className="w-full h-16 bg-white shadow-2xl relative z-50 border-gray-400 text-black text-vorder font-bold p-4 text-xl grid grid-cols-3" >
           <Link href="/" >🏠 Home</Link>
           <Link href="/#forms" className="text-center">📝 Forms</Link>
-          <Link href="#footer" className="text-white"> you found me!</Link>
+          <div className="text-white flex justify-end"> you found me!</div>
         </div>
         <div className="min-h-screen">
           {children}

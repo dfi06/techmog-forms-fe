@@ -66,13 +66,13 @@ const Page = ({ params }) => {
   if (!form) return (
     <div>
       <div>Failed to load</div>
-      <Link href="/"><Button>Back</Button></Link>
+      <Button onClick={() => router.back()}>← Back</Button>
     </div>
   )
 
   return (
     <div>
-      <Link href="/"><Button>Back</Button></Link>
+      <Button onClick={() => router.back()}>← Back</Button>
       {user?._id === form?.owner_id ? (
         <>
           <Link href={`/form/${form_id}/edit`}><Button>Edit</Button></Link>
