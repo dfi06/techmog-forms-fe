@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { toast } from "sonner"
-import React, { use, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import {
   Combobox,
   ComboboxContent,
@@ -15,17 +15,41 @@ import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 
 const Page = ({params}) => {
+  const router = useRouter()
   const { form_id } = use(params)
-  const [questionsArr, setQuestionsArr] = useState([])
+  const [form, setForm] = useState(null)
+  const [questionsArr, setQuestionsArr] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(null)
+
   const addNewQ = () => {
     
     setQuestionsArr(prev => [...prev, {question_id: crypto.randomUUID(), type:"Multiple Choice", options:["Option 1", "Option 2"], required: true, answer: null, question_text: "Hi, answer pls:", correctAnswerIndex: 0}])
   }
 
-  
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token")
+
+      const userRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/me`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      const userData = await userRes.json()
+      setUser(userData.user)
+
+      const formRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/form/by/${form_id}`)
+      const formData = await formRes.json()
+      setForm(formData.form)
+
+      setLoading(false)
+    }
+
+    fetchData()
+  }, [])
 
   const questionTypes = ["Multiple Choice", "Short Answer", "Checkbox", "Dropdown"]
 
@@ -95,10 +119,21 @@ const Page = ({params}) => {
   );
 };
 
+  const updateFormTitle = () => {
+    
+  }
+
+  if (loading) return <div>Loading...</div>
+  
+  if  (user?._id !== form?.owner_id) {
+    router.push('/login')
+    return null;
+  }
   return (
     <div>
         <Link href={`/form/${form_id}/peek`}><Button>Back</Button></Link>
-        
+        <Input onChange={updateFormTitle}></Input>
+        {}
         {questionsArr.length !== 0 ? questionsArr.map((q, i) => (
           <div key={q.question_id} className='min-h-60 border-5 border-blue-500 text-white'>
             <div className='inline-flex w-full gap-2'>

@@ -43,25 +43,29 @@ export default function Home() {
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/form/search?q=${searchQuery}`
     )
     const data = await res.json()
-
+    console.log(data);
     if (data.forms) {
       setFormsArr(data.forms)
+      
+      
     }
   }
 
   const makeNewForm = async () => {
-    const token = localStorage.getItem('token');
-    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/form/create`, {
-      body: JSON.stringify({ owner_id: user?._id}),
-      method: "POST",
-      headers: { 
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }  
-    }).then(res => res.json())
-    .then(data => {
-      if(data) router.push(`/form/${data?.form_id}/edit`)
-    })
+    if (user){
+      const token = localStorage.getItem('token');
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/form/create`, {
+        body: JSON.stringify({ owner_id: user._id, owner_username: user.username}),
+        method: "POST",
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }  
+      }).then(res => res.json())
+      .then(data => {
+        if(data) router.push(`/form/${data?.form_id}/edit`)
+      })
+    } 
   }
 
   const handleLogout = async () => {
@@ -71,7 +75,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className=" h-[65vh] flex flex-col py-20 border-y-2 border-gray-500 bg-blue-400 text-white w-full gap-16 justify-center">
+        <div className=" h-[65vh] flex flex-col py-20 border-y-2 border-gray-500 bg-primary text-white w-full gap-16 justify-center">
         <div className="flex gap-32 justify-center">
           <div className=" space-y-4">
             <h1 className="font-bold text-4xl ">Welcome, {user?.username}</h1>
@@ -143,24 +147,41 @@ export default function Home() {
         </div>
       </div>
       <div className="w-full h-10 shadow-2xl rotate-180 relative z-50"/>
-      {user ? (
-            <Button onClick={makeNewForm}>Make a form</Button>
-          ) : (
-            <div>Please log in to make a form</div>
-          )
-          }
-      <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}></Input><Button onClick={handleSearch}>Search</Button>
-      <div id="forms">Forms:</div>
-        {formsArr.length !== 0 ? formsArr.map((form, i) => (
-          <div key={i} className="min-h-60 border-5 border-blue-500">
-            {form.title}
-            <>
-              <div><Link href={`form/${form._id}/peek`}><Button>Peek</Button></Link></div>
-              <Link href={`form/${form.form_id}/attempt`}><Button>Start</Button></Link>
-            </>
-            
+      
+          
+      
+      <div id="forms" className=" mx-40 grid grid-cols-3 items-center">
+        <div className="font-bold text-3xl">Forms:</div>
+        <div className="flex gap-4">
+          <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-100"></Input><Button onClick={handleSearch}>Search</Button>
+        </div>
+        <div className="flex justify-end">
+        {user ? (
+          <Button onClick={makeNewForm} className="w-40 font-bold ">
+            Make a form
+          </Button>
+        ) : (
+          <div className="">Login to make a form</div>
+        )}
+      </div>
+      </div>
+        {formsArr.length !== 0 ? (
+          <div className="grid grid-cols-3 gap-6 mx-40 mt-10 mb-40">
+            {formsArr.map((form, i) => (
+            <div key={i} className="min-h-20 border-5 border-primary p-8 rounded-xl space-y-2 shadow-xl hover:scale-102 relative hover:-top-1">
+              <div className="flex justify-between font-bold">
+                {form.title}
+                <Link href={`form/${form._id}/peek`}><Button className="px-8">Peek</Button></Link>
+              </div>
+              <div className="flex justify-between">
+                Made by: {form.owner_username}
+                <Link href={`form/${form.form_id}/attempt`}><Button className="px-8">Start</Button></Link>
+              </div>
+              
+            </div>
+            ))}
           </div>
-        )): "No forms yet"}
+        ): "No forms yet"}
     </div>
   );
 }

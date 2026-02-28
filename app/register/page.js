@@ -42,16 +42,20 @@ const Page = () => {
   }
 
   return (
-    <div>
-        <Link href="/"><Button>Back</Button></Link>
-        <form onSubmit={handleRegister}>
+
+    <div className='w-100 mx-auto'>
+        <Button onClick={() => router.back()} className='w-24 mb-4  mt-30'>← Back</Button>
+        <form onSubmit={handleRegister} className='px-8 py-12 w-80 gap-2 flex flex-col border-primary border-2 shadow-xl rounded-xl '>
+          
             <Label>Enter username</Label>
-            <Input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Type your username here!" required></Input>
+            <Input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required className='mb-4'></Input>
             <Label>Enter password</Label>
-            <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Type your password here!" required></Input>
-            <Button>Register</Button>
+            <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required></Input>
+            <Button className='w-36 mt-8 self-center' type="submit">Register</Button>
         </form>
     </div>
+
+
   )
 }
 

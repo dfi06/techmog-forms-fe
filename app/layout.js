@@ -30,19 +30,19 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased ${sora.variable} font-sora`}
       >
-        <div className="w-full h-16 bg-white shadow-2xl relative z-50 border-gray-400 text-black text-vorder font-bold p-4 text-xl flex justify-between" >
+        <div className="w-full h-16 bg-white shadow-2xl relative z-50 border-gray-400 text-black text-vorder font-bold p-4 text-xl grid grid-cols-3" >
           <Link href="/" >🏠 Home</Link>
-          <Link href="/#forms" className="pl-12">📝 Forms</Link>
+          <Link href="/#forms" className="text-center">📝 Forms</Link>
           <Link href="#footer" className="text-white"> you found me!</Link>
         </div>
         <div className="min-h-screen">
           {children}
         </div>
         <Toaster />
-        <div id="footer"  className="w-full h-40 bg-blue-400 p-16 flex flex-col  text-center">
+        <div id="footer"  className="w-full h-40 bg-primary p-16 flex flex-col  text-center text-white">
           made w ♡ 
           <Link href="https://github.com/dfi06">{`click me for my github`}</Link>
-          <div className="text-blue-400">ui is n̶o̶t̶ my passion</div>
+          <div className="text-primary">ui is n̶o̶t̶ my passion</div>
         </div >
       </body>
       
