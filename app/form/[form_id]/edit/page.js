@@ -82,9 +82,7 @@ const Page = ({params}) => {
     setForm(prev => ({ ...prev, questions: (prev.questions || []).map(q => q.question_id === question_id ? {...q, question_text: new_value} : q) }))
   }
 
-  const updateCorrectAnswer = (question_id, index_to_update) => {
-  setForm(prev => ({ ...prev, questions: (prev.questions || []).map(q => q.question_id === question_id ? { ...q, correctAnswerIndex: index_to_update } : q) }))
-};
+  
 
   const updateFormTitle = (e) => {
     const newTitle = e.target.value
@@ -136,7 +134,7 @@ const saveForm = async (e) => {
             {`Don't forget to save changes!`}
             <Button type="submit">Save changes</Button>
           </div>
-          
+          <Label>Form title</Label>
           <Input value={form.title} onChange={updateFormTitle} required></Input>
           {form.questions.length !== 0 ? form.questions.map((q, i) => (
             <div key={q.question_id} className='min-h-60 border-5 border-primary'>
@@ -162,10 +160,10 @@ const saveForm = async (e) => {
               
               {q.type === "Multiple Choice" && (
                 <div>
-                  <RadioGroup value={String(q.correctAnswerIndex)} onValueChange={(val) => updateCorrectAnswer(q.question_id, Number(val))}>
+                  <RadioGroup>
                     {q.options.map((o,i)=>(
                       <div key={`${q.question_id}-${i}`} className="flex items-center gap-3">
-                        <RadioGroupItem value={`${i}`} id={`${q.question_id}-${i}`} />
+                        <RadioGroupItem value={i}/>
                         <Label htmlFor={`${q.question_id}-${i}`}>
                           {`Option ${i + 1}`}
                         </Label>
@@ -180,19 +178,54 @@ const saveForm = async (e) => {
                 
               )}
               {q.type === "Short Answer" && (
-                <div>
-                  <Label>Write your answer</Label>
-                  <Input placeholder="This is where users will write" readOnly></Input>
-                </div>
+
+                  <Input placeholder="This is where users will write their answer" readOnly></Input>
+
               )}
               {q.type === "Checkbox" && (
                 <div>
-                  u selected checkbox
-                  <Button>+</Button>
+                  {q.options.map((o,i)=> (
+                    <div key={`${q.question_id}-${i}`} className="flex items-center gap-3">
+                      <Checkbox />
+                      <Label htmlFor={`${q.question_id}-${i}`}>
+                        {`Option ${i + 1}`}
+                      </Label>
+                      <Input value={o} required onChange={(e) => updateOption(q.question_id, i, e.target.value)} placeholder="Enter your option"></Input>
+                      <Button onClick={() => deleteOption(q.question_id, i)}>X</Button>
+                    </div>
+                  ))}
+                  <Button onClick={() => addOption(q.question_id)}>+</Button>
                 </div>
               )}
               {q.type === "Dropdown" && (
                 <div>
+                  {q.options.map((o,i)=> (
+                    <div key={`${q.question_id}-${i}`} className="flex items-center gap-3">
+                      <Label>
+                        {`Field ${i + 1}`}
+                      </Label>
+                      <Input value={o} required onChange={(e) => updateOption(q.question_id, i, e.target.value)} placeholder="Enter dropdown field"></Input>
+                      <Button onClick={() => deleteOption(q.question_id, i)}>X</Button>
+                    </div>
+                  ))}
+                  <Button onClick={() => addOption(q.question_id)}>+</Button>
+
+                  <div className="mt-2">
+                    <Label>Dropdown preview</Label>
+                    <Combobox items={q.options || []}>
+                      <ComboboxInput placeholder="Preview dropdown" />
+                      <ComboboxContent>
+                        <ComboboxEmpty>No options</ComboboxEmpty>
+                        <ComboboxList>
+                          {(item) => (
+                            <ComboboxItem key={item} value={item}>
+                              {item}
+                            </ComboboxItem>
+                          )}
+                        </ComboboxList>
+                      </ComboboxContent>
+                    </Combobox>
+                  </div>
                 </div>
                 
               )}

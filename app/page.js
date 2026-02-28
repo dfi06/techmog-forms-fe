@@ -175,7 +175,7 @@ export default function Home() {
               </div>
               <div className="flex justify-between">
                 Made by: {form.owner_username}
-                <Link href={`form/${form.form_id}/attempt`}><Button className="px-8">Start</Button></Link>
+                <Link href={`form/${form._id}/attempt`}><Button className="px-8">Start</Button></Link>
               </div>
               
             </div>
