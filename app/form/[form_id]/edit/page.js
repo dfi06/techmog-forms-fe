@@ -188,7 +188,7 @@ const Page = ({ params }) => {
       const data = await res.json();
       if (!res.ok) {
         toast(data.message || "Save failed");
-        return null;
+        return;
       }
       // normalize returned form so UI uses question_id keys
       setForm(normalizeSavedForm(data.form));
@@ -211,7 +211,7 @@ const Page = ({ params }) => {
       const data = await res.json();
       if (!res.ok) {
         toast(data.message);
-        return null;
+        return ;
       }
       if (data) {
         toast.success("Form deleted successfully");
@@ -226,12 +226,12 @@ const Page = ({ params }) => {
 
   if (user?._id !== form?.owner_id) {
     router.push("/login");
-    return null;
+    return ;
   }
 
   if (!form) {
     router.push("/");
-    return null;
+    return ;
   }
 
   return (

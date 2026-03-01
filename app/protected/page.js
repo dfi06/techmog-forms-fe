@@ -16,7 +16,7 @@ const Page = () => {
         }).then(res => {
             if (!res.ok){
                 router.push('/login')
-                return null
+                return;
             }
             return res.json()
         }).then(data => {
