@@ -37,7 +37,7 @@ const Page = () => {
         return;
       }
 
-      toast.success("Registered successfully");
+      toast.success("Registered successfully, please login");
       router.push("/login");
     } catch (err) {
       toast.error("Network error");
@@ -46,13 +46,14 @@ const Page = () => {
 
   return (
     <div className="w-100 mx-auto">
-      <Button onClick={() => router.back()} className="w-24 mb-4  mt-30">
+      <Button onClick={() => router.back()} className="w-24 mb-4  mt-20">
         ← Back
       </Button>
       <form
         onSubmit={handleRegister}
-        className="px-8 py-12 w-80 gap-2 flex flex-col border-primary border-2 shadow-xl rounded-xl "
+        className="p-8 w-80 gap-2 flex flex-col border-primary border-2 shadow-xl rounded-xl "
       >
+        <div className="font-semibold text-center text-xl mb-8">Register</div>
         <Label>Enter username</Label>
         <Input
           value={username}
