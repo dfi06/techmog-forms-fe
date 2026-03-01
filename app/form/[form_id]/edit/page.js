@@ -61,6 +61,20 @@ const Page = ({ params }) => {
     fetchData();
   }, [form_id]);
 
+  useEffect(() => {
+    if (!loading) {
+      if (!form) {
+        toast.error("Form not found");
+        router.replace("/"); // replace instead of push so back button doesn’t loop
+      } else if (!user) {
+        router.replace("/login"); // no toast
+      } else if (user._id !== form.owner_id) {
+        toast.error("You are not allowed to access this form");
+        router.replace("/"); // safe fallback
+      }
+    }
+  }, [loading, user, form, router]);
+
   const questionTypes = [
     "Multiple Choice",
     "Short Answer",
@@ -192,7 +206,7 @@ const Page = ({ params }) => {
       }
       toast.success("Saved");
     } catch (err) {
-      toast.error(err.message || "Save error");
+      toast.error("Save error");
     }
   };
 
@@ -222,15 +236,7 @@ const Page = ({ params }) => {
 
   if (loading) return <Spinner className="size-12 mx-auto mt-[30vh]" />;
 
-  if (user?._id !== form?.owner_id) {
-    router.push("/login");
-    return;
-  }
-
-  if (!form) {
-    router.push("/");
-    return;
-  }
+  if (!form || !user || user._id !== form.owner_id) return null;
 
   return (
     <div>

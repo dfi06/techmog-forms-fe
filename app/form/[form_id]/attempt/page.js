@@ -134,7 +134,13 @@ const Page = ({ params }) => {
         <Button onClick={() => router.back()} className="w-24">
           ← Back
         </Button>
-        {form.title}
+        <div>
+          <h1>{form.title}</h1>
+          <p className="truncate pr-4 text-sm font-normal text-gray-400">
+            Made by: {form.owner_username}
+          </p>
+        </div>
+
         {isPeeking && user?._id === form?.owner_id ? (
           <div className="flex gap-4 justify-end ">
             <Link href={`/form/${form_id}/edit`}>
@@ -159,11 +165,13 @@ const Page = ({ params }) => {
             key={question._id}
             className="border-b-gray-300 border-b py-10 mx-100"
           >
-            <div className="mb-4">
-              {question.question_text}
-              <span className="text-red-600 opacity-40 ml-auto">
-                {question.required ? ` *` : ""}
-              </span>
+            <div className="mb-4 ">
+              <p className="w-150 wrap-anywhere">
+                {question.question_text}
+                <span className="text-red-600 opacity-40 ml-auto">
+                  {question.required ? ` *` : ""}
+                </span>
+              </p>
             </div>
 
             {question.type === "Multiple Choice" && (
@@ -182,7 +190,10 @@ const Page = ({ params }) => {
                         id={`${question._id}-${i}`}
                         value={question.options[i]}
                       />
-                      <Label className="mb-0" htmlFor={`${question._id}-${i}`}>
+                      <Label
+                        className="mb-0 w-150 wrap-anywhere "
+                        htmlFor={`${question._id}-${i}`}
+                      >
                         {opt}
                       </Label>
                     </div>

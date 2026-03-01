@@ -214,7 +214,7 @@ export default function Home() {
                   className="min-h-20 border-5 border-primary p-8 rounded-xl space-y-2 shadow-xl hover:scale-102 relative hover:-top-1"
                 >
                   <div className="flex justify-between font-bold">
-                    {form.title}
+                    <p className="break-all pr-4">{form.title}</p>
                     <Button
                       className="px-8"
                       onClick={() => {
@@ -224,8 +224,10 @@ export default function Home() {
                       Peek
                     </Button>
                   </div>
-                  <div className="flex justify-between">
-                    Made by: {form.owner_username}
+                  <div className="flex  justify-between">
+                    <p className="break-all pr-4">
+                      Made by: {form.owner_username}
+                    </p>
                     <Button
                       className="px-8"
                       onClick={() => {

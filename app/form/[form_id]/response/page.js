@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
+import { toast } from "sonner";
 
 const Page = ({ params }) => {
   const router = useRouter();
@@ -41,13 +42,19 @@ const Page = ({ params }) => {
       );
       const responseData = await responseRes.json();
       setResponse(responseData);
-      console.log(responseData);
 
       setLoading(false);
     };
 
     fetchData();
   }, [form_id]);
+
+  useEffect(() => {
+    if (!loading && user && response && user._id !== response.owner_id) {
+      toast.error("Please login to confirm you are the owner!");
+      router.push("/login");
+    }
+  }, [loading, user, response, router]);
 
   const COLORS = [
     "#0088FE",
@@ -94,7 +101,10 @@ const Page = ({ params }) => {
           );
 
           return (
-            <div key={question.question_id} className="border p-4">
+            <div
+              key={question.question_id}
+              className="border p-4 wrap-break-word"
+            >
               <div>{question.question_text}</div>
 
               <div style={{ width: 600, height: 400 }}>
@@ -105,15 +115,28 @@ const Page = ({ params }) => {
                       dataKey="value"
                       nameKey="name"
                       outerRadius={100}
-                      label
+                      label={({ name, percent }) =>
+                        `${name.length > 10 ? name.slice(0, 10) + "…" : name} (${(
+                          percent * 100
+                        ).toFixed(0)}%)`
+                      }
                     ></Pie>
 
-                    <Tooltip />
+                    <Tooltip
+                      formatter={(value, name) => {
+                        const shortName =
+                          name.length > 30 ? name.slice(0, 30) + "…" : name;
+                        return [value, shortName];
+                      }}
+                    />
                     <Legend
                       layout="vertical"
                       verticalAlign="middle"
                       align="right"
                       className="ml-40"
+                      formatter={(value) =>
+                        value.length > 20 ? value.slice(0, 20) + "…" : value
+                      }
                     />
                   </PieChart>
                 </ResponsiveContainer>
@@ -121,7 +144,6 @@ const Page = ({ params }) => {
             </div>
           );
         })}
-        <div></div>
       </div>
     </div>
   );
