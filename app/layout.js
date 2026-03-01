@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
           <div className="text-white flex justify-end"> you found me!</div>
         </div>
         <div className="min-h-screen">{children}</div>
-        <Toaster />
+        <Toaster position="top-center" />
         <div
           id="footer"
           className="w-full h-40 bg-primary p-16 flex flex-col  text-center text-white"
