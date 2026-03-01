@@ -25,8 +25,8 @@ const Page = ({ params }) => {
   const searchParams = useSearchParams();
   const isPeeking = searchParams.get("peek") === "true";
 
-  const [form, setForm] = useState(null);
-  const [attempt, setAttempt] = useState({});
+  const [form, setForm] = useState({ questions: [] });
+  const [attempt, setAttempt] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
@@ -51,7 +51,7 @@ const Page = ({ params }) => {
       setForm(formData.form);
 
       setAttempt(
-        (formData.form.question ?? []).map((question) => ({
+        (formData.form.questions ?? []).map((question) => ({
           question_id: question._id,
           answer: [],
         })),
@@ -63,17 +63,30 @@ const Page = ({ params }) => {
     fetchData();
   }, [form_id]);
 
-  useEffect(() => {
-    console.log(attempt);
-    console.log(form);
-  }, [attempt, form]);
+  // useEffect(() => {
+  //   console.log(attempt);
+  //   console.log(form);
+  // }, [attempt, form]);
 
   const handleSubmit = async () => {
+    const missingRequired = form.questions.some(
+      (q) =>
+        q.required &&
+        !attempt.find((a) => a.question_id === q._id)?.answer.length,
+    );
+
+    if (missingRequired) {
+      toast.error("Please answer all required questions.");
+      return;
+    }
+
     const payload = {
       form_id,
-      answers: [],
+      answers: attempt,
     };
-    if (user) payload.attempted_by_id = user.id;
+    if (user) payload.attempted_by_id = user._id;
+
+    // console.log(payload);
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/attempt/create`,
@@ -83,32 +96,34 @@ const Page = ({ params }) => {
         headers: { "Content-Type": "application/json" },
       },
     );
-    if (!res.ok) return null;
+    if (!res.ok) return;
+    toast.success("Form submitted");
     router.back();
   };
 
-  const handleDelete = async () => {
-    const token = localStorage.getItem("token");
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/form/delete/${form_id}`,
-        {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      const data = await res.json();
-      if (!res.ok) {
-        toast(data.message);
-        return null;
-      }
-      if (data) {
-        toast.success("Form deleted successfully");
-        router.push("/");
-      }
-    } catch (err) {
-      console.error("Delete failed", err);
-    }
+  const handleAnswer = (question_id, newAnswer, type) => {
+    setAttempt((prev) =>
+      prev.map((ans) => {
+        if (ans.question_id === question_id) {
+          if (
+            type === "Multiple Choice" ||
+            type === "Short Answer" ||
+            type === "Dropdown"
+          ) {
+            return { ...ans, answer: [newAnswer] };
+          } else if (type === "Checkbox") {
+            const exists = ans.answer.includes(newAnswer);
+            return {
+              ...ans,
+              answer: exists
+                ? ans.answer.filter((a) => a !== newAnswer)
+                : [...ans.answer, newAnswer],
+            };
+          }
+        }
+        return ans;
+      }),
+    );
   };
 
   if (loading) return <Spinner className="size-12 mx-auto mt-[30vh]" />;
@@ -130,7 +145,9 @@ const Page = ({ params }) => {
             </Link>
           </div>
         ) : (
-          ""
+          <div className="text-red-600 text-xs opacity-50 ml-auto">
+            * marks required questions{" "}
+          </div>
         )}
       </div>
 
@@ -140,14 +157,18 @@ const Page = ({ params }) => {
             key={question._id}
             className="border-b-gray-300 border-b py-10 mx-100"
           >
-            <div>{question.question_text}</div>
+            <div className="mb-4">
+              {question.question_text}
+              <span className="text-red-600 opacity-40 ml-auto">
+                {question.required ? ` *` : ""}
+              </span>
+            </div>
 
             {question.type === "Multiple Choice" && (
               <div className="flex flex-col mt-2">
                 <RadioGroup
                   onValueChange={(val) =>
-                    typeof setSingleChoice === "function" &&
-                    setSingleChoice(question._id, Number(val))
+                    handleAnswer(question._id, val, "Multiple Choice")
                   }
                 >
                   {question.options.map((opt, i) => (
@@ -170,7 +191,9 @@ const Page = ({ params }) => {
 
             {question.type === "Short Answer" && (
               <Input
-                onChange={(e) => setShortAnswer(question._id, e.target.value)}
+                onChange={(e) =>
+                  handleAnswer(question._id, e.target.value, "Short Answer")
+                }
                 className="mt-2"
               />
             )}
@@ -182,7 +205,17 @@ const Page = ({ params }) => {
                     key={`${question._id}-${i}`}
                     className="flex items-center gap-3"
                   >
-                    <Checkbox id={`${question._id}-${i}`} />
+                    <Checkbox
+                      id={`${question._id}-${i}`}
+                      checked={
+                        attempt
+                          .find((a) => a.question_id === question._id)
+                          ?.answer.includes(opt) || false
+                      }
+                      onCheckedChange={(checked) =>
+                        handleAnswer(question._id, opt, "Checkbox")
+                      }
+                    />
                     <Label className="mb-0" htmlFor={`${question._id}-${i}`}>
                       {opt}
                     </Label>
@@ -193,7 +226,12 @@ const Page = ({ params }) => {
 
             {question.type === "Dropdown" && (
               <div className="mt-2">
-                <Combobox items={question.options || []}>
+                <Combobox
+                  items={question.options || []}
+                  onInputValueChange={(val) =>
+                    handleAnswer(question._id, val, "Dropdown")
+                  }
+                >
                   <ComboboxInput placeholder="Pick" />
                   <ComboboxContent>
                     <ComboboxEmpty>No options</ComboboxEmpty>
