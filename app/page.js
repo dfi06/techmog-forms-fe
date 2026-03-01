@@ -66,7 +66,10 @@ export default function Home() {
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data) router.push(`/form/${data?.form_id}/edit`);
+          if (data) {
+            window.scrollTo(0, 0);
+            router.push(`/form/${data?.form_id}/edit`);
+          }
         });
     }
   };
@@ -192,15 +195,27 @@ export default function Home() {
                 >
                   <div className="flex justify-between font-bold">
                     {form.title}
-                    <Link href={`form/${form._id}/peek`}>
-                      <Button className="px-8">Peek</Button>
-                    </Link>
+                    <Button
+                      className="px-8"
+                      onClick={() => {
+                        
+                        router.push(`/form/${form._id}/peek`);
+                      }}
+                    >
+                      Peek
+                    </Button>
                   </div>
                   <div className="flex justify-between">
                     Made by: {form.owner_username}
-                    <Link href={`form/${form._id}/attempt`}>
-                      <Button className="px-8">Start</Button>
-                    </Link>
+                    <Button
+                      className="px-8"
+                      onClick={() => {
+                        
+                        router.push(`/form/${form._id}/attempt`);
+                      }}
+                    >
+                      Start
+                    </Button>
                   </div>
                 </div>
               ))

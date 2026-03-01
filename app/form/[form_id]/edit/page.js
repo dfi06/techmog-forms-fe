@@ -26,20 +26,6 @@ const Page = ({ params }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
-  const addNewQ = () => {
-    const newQ = {
-      question_id: crypto.randomUUID(),
-      type: "Multiple Choice",
-      options: ["Option 1", "Option 2"],
-      required: true,
-      question_text: "What is the question?",
-    };
-    setForm((prev) => ({
-      ...prev,
-      questions: [...(prev.questions || []), newQ],
-    }));
-  };
-
   // normalize form: map question._id (be & db) -> question.question_id (fe)
   const normalizeSavedForm = (saved) => ({
     ...saved,
@@ -50,6 +36,7 @@ const Page = ({ params }) => {
   });
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchData = async () => {
       const token = localStorage.getItem("token");
 
@@ -80,6 +67,20 @@ const Page = ({ params }) => {
     "Checkbox",
     "Dropdown",
   ];
+
+  const addNewQ = () => {
+    const newQ = {
+      question_id: crypto.randomUUID(),
+      type: "Multiple Choice",
+      options: ["Option 1", "Option 2"],
+      required: true,
+      question_text: "What is the question?",
+    };
+    setForm((prev) => ({
+      ...prev,
+      questions: [...(prev.questions || []), newQ],
+    }));
+  };
 
   const updateType = (question_id, newType) => {
     setForm((prev) => ({
@@ -197,6 +198,30 @@ const Page = ({ params }) => {
     }
   };
 
+  const handleDelete = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/form/delete/${form_id}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        toast(data.message);
+        return null;
+      }
+      if (data) {
+        toast.success("Form deleted successfully");
+        router.push("/");
+      }
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
+  };
+
   if (loading) return <Spinner className="size-12 mx-auto mt-[30vh]" />;
 
   if (user?._id !== form?.owner_id) {
@@ -211,8 +236,11 @@ const Page = ({ params }) => {
 
   return (
     <div>
-      <div className="p-10">
+      <div className="p-10 pt-20 flex justify-between">
         <Button onClick={() => router.back()}>← Back</Button>
+        <Button onClick={handleDelete} className="ml-auto">
+          Delete
+        </Button>
       </div>
       <form onSubmit={saveForm} className="mx-100 space-y-4">
         <div className="text-xl font-semibold grid grid-cols-2 items-center mb-8">
