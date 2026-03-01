@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
+import DotGrid from "@/components/DotGrid";
 
 export default function Home() {
   const router = useRouter();
@@ -83,53 +84,37 @@ export default function Home() {
 
   return (
     <div>
-      <div className=" h-[65vh] flex flex-col py-20 border-y-2 border-gray-500 bg-primary text-white w-full gap-16 justify-center">
-        <div className="flex gap-32 justify-center">
-          <div className=" space-y-4">
-            <h1 className="font-bold text-4xl ">Welcome, {user?.username}</h1>
-            <p className="w-[40ch] ">
-              Make and submit forms. Techmog™ other chudmaxxing arch-cels. We
-              provide the best in-house tools for creating forms. Usage of site
-              may attract attention from foids, Techmog Forms is not liable for
-              any unwanted conduct or damages. Site performance may vary due to
-              3rd party service limits.
-            </p>
-          </div>
-          <motion.div
-            animate={{
-              x: ["0%", "3%", "0%"],
-            }}
-            transition={{
-              duration: 1.5,
-              ease: "easeInOut",
-              repeat: Infinity,
-              repeatType: "loop",
-            }}
-            className="my-auto flex items-center gap-4"
-          >
-            <motion.div
-              animate={{
-                y: ["5%", "-20%", "5%"],
-              }}
-              transition={{
-                duration: 1.5,
-                ease: "easeInOut",
-                repeat: Infinity,
-                repeatType: "loop",
-              }}
-              className="text-7xl transform -scale-x-100"
-            >
-              🫴
-            </motion.div>
-            <div>
-              <h1 className="-tracking-[0.085em] font-bold text-6xl ">
-                Techmog{" "}
-              </h1>
-              <h1 className="-tracking-[0.085em] font-bold text-6xl">Forms.</h1>
+      <div className="w-full h-[65vh] relative border-y-2 border-gray-500 text-white bg-primary ">
+        <div className="absolute z-0 inset-0">
+          <DotGrid
+            dotSize={10}
+            gap={42}
+            baseColor="#482cc3"
+            activeColor="#ffffff"
+            proximity={120}
+            speedTrigger={100}
+            shockRadius={250}
+            shockStrength={10}
+            maxSpeed={5000}
+            resistance={750}
+            returnDuration={1.5}
+          />
+        </div>
+        <div className="flex flex-col py-20   gap-16 justify-center relative w-full h-full z-20">
+          <div className="flex gap-32 justify-center">
+            <div className=" space-y-4">
+              <h1 className="font-bold text-4xl ">Welcome, {user?.username}</h1>
+              <p className="w-[40ch] ">
+                Make and submit forms. Techmog™ other chudmaxxing arch-cels. We
+                provide the best in-house tools for creating forms. Usage of
+                site may attract attention from foids, Techmog Forms is not
+                liable for any unwanted conduct or damages. Site performance may
+                vary due to 3rd party service limits.
+              </p>
             </div>
             <motion.div
               animate={{
-                y: ["-20%", "5%", "-20%"],
+                x: ["0%", "3%", "0%"],
               }}
               transition={{
                 duration: 1.5,
@@ -137,31 +122,66 @@ export default function Home() {
                 repeat: Infinity,
                 repeatType: "loop",
               }}
-              className="text-7xl transform "
+              className="my-auto flex items-center gap-4"
             >
-              🫴
+              <motion.div
+                animate={{
+                  y: ["5%", "-20%", "5%"],
+                }}
+                transition={{
+                  duration: 1.5,
+                  ease: "easeInOut",
+                  repeat: Infinity,
+                  repeatType: "loop",
+                }}
+                className="text-7xl transform -scale-x-100"
+              >
+                🫴
+              </motion.div>
+              <div>
+                <h1 className="-tracking-[0.085em] font-bold text-6xl ">
+                  Techmog{" "}
+                </h1>
+                <h1 className="-tracking-[0.085em] font-bold text-6xl">
+                  Forms.
+                </h1>
+              </div>
+              <motion.div
+                animate={{
+                  y: ["-20%", "5%", "-20%"],
+                }}
+                transition={{
+                  duration: 1.5,
+                  ease: "easeInOut",
+                  repeat: Infinity,
+                  repeatType: "loop",
+                }}
+                className="text-7xl transform "
+              >
+                🫴
+              </motion.div>
             </motion.div>
-          </motion.div>
-        </div>
-        <div className="space-x-8 self-center mx-auto">
-          {!user ? (
-            <>
-              <Link href="/login">
-                <Button variant="darkblue">Login</Button>
-              </Link>
-              <Link href="/register">
-                <Button variant="white">Register</Button>
-              </Link>
-            </>
-          ) : (
-            <Button
-              variant="destructive"
-              onClick={handleLogout}
-              className="w-28"
-            >
-              Logout
-            </Button>
-          )}
+          </div>
+          <div className="space-x-8 self-center mx-auto">
+            {!user ? (
+              <>
+                <Link href="/login">
+                  <Button variant="darkblue">Login</Button>
+                </Link>
+                <Link href="/register">
+                  <Button variant="white">Register</Button>
+                </Link>
+              </>
+            ) : (
+              <Button
+                variant="destructive"
+                onClick={handleLogout}
+                className="w-28"
+              >
+                Logout
+              </Button>
+            )}
+          </div>
         </div>
       </div>
       <div className="w-full h-10 shadow-2xl rotate-180 relative z-50" />
@@ -198,7 +218,6 @@ export default function Home() {
                     <Button
                       className="px-8"
                       onClick={() => {
-                        
                         router.push(`/form/${form._id}/peek`);
                       }}
                     >
@@ -210,7 +229,6 @@ export default function Home() {
                     <Button
                       className="px-8"
                       onClick={() => {
-                        
                         router.push(`/form/${form._id}/attempt`);
                       }}
                     >
