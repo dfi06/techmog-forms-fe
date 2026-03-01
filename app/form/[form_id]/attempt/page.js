@@ -145,10 +145,12 @@ const Page = ({ params }) => {
             </Link>
           </div>
         ) : (
-          <div className="text-red-600 text-xs opacity-50 ml-auto">
-            * marks required questions{" "}
-          </div>
+          ""
         )}
+      </div>
+
+      <div className="text-red-600 text-xs opacity-50 flex justify-end my-4 mr-16">
+        * marks required questions
       </div>
 
       {(form.questions ?? []).map((question, i) => {
