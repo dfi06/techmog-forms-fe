@@ -49,6 +49,7 @@ create .env for backend folder:
 MONGODB_URI= <obtain by creating a cluster in MongoDB Atlas>
 JWT_SECRET=supersecretkey
 FRONTEND_URL=http://localhost:3000
+BACKEND_URL=http://localhost:3001
 ```
 
 run a terminal for each folder. For both terminals, run
