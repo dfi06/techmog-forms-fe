@@ -190,8 +190,6 @@ const Page = ({ params }) => {
         toast(data.message || "Save failed");
         return;
       }
-      // normalize returned form so UI uses question_id keys
-      setForm(normalizeSavedForm(data.form));
       toast.success("Saved");
     } catch (err) {
       toast.error(err.message || "Save error");
@@ -211,7 +209,7 @@ const Page = ({ params }) => {
       const data = await res.json();
       if (!res.ok) {
         toast(data.message);
-        return ;
+        return;
       }
       if (data) {
         toast.success("Form deleted successfully");
@@ -226,12 +224,12 @@ const Page = ({ params }) => {
 
   if (user?._id !== form?.owner_id) {
     router.push("/login");
-    return ;
+    return;
   }
 
   if (!form) {
     router.push("/");
-    return ;
+    return;
   }
 
   return (
