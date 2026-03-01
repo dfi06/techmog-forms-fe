@@ -17,6 +17,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Plus, Trash } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 const Page = ({ params }) => {
   const router = useRouter();
@@ -196,7 +197,7 @@ const Page = ({ params }) => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Spinner className="size-12 mx-auto mt-[30vh]" />;
 
   if (user?._id !== form?.owner_id) {
     router.push("/login");
