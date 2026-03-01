@@ -21,7 +21,7 @@ export default function Home() {
     })
       .then((res) => {
         if (!res.ok) {
-          return null;
+          return;
         }
         return res.json();
       })
@@ -44,7 +44,7 @@ export default function Home() {
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/form/search?q=${searchQuery}`,
     );
     const data = await res.json();
-    console.log(data);
+    // console.log(data);
     if (data.forms) {
       setFormsArr(data.forms);
     }
