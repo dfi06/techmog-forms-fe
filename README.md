@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Techmog Forms
 
-## Getting Started
+A website to make and create forms.
 
-First, run the development server:
+Techstack:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Nextjs Frontend, Deployed on Vercel
+- Expressjs Backend, Deployed on Vercel
+- Mongodb Database, Deployed on Mongodb Atlas
+
+---
+
+## Website live on
+
+**[Techmog Forms](techmog-forms-fe.vercel.app)**
+
+Performance may be inconsistent due to 3rd party deployment resources
+
+---
+
+## Project repositories
+
+- **Frontend**: [techmog-forms-fe](https://github.com/dfi06/techmog-forms-fe)
+- **Backend**: [techmog-forms-be](https://github.com/dfi06/techmog-forms-be)
+
+---
+
+## Running locally
+
+Ensure you have git and Node installed
+
+clone the two repos in separate folders each using
+
+```
+git clone <repo url> 
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+name them however you want, for example frontend and backend
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+create .env for frontend folder:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+NEXT_PUBLIC_BACKEND_URL=http://localhost:3001
+```
 
-## Learn More
+create .env for backend folder:
 
-To learn more about Next.js, take a look at the following resources:
+```
+MONGODB_URI= <obtain by creating a cluster in MongoDB Atlas>
+JWT_SECRET=supersecretkey
+FRONTEND_URL=http://localhost:3000
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+run a terminal for each folder. For both terminals, run
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+npm i
+npm run dev
+```
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+the local only site should be available on `http://localhost:3000`
