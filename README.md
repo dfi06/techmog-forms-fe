@@ -59,4 +59,6 @@ npm i
 npm run dev
 ```
 
+note: if backend fails to run, I had an issue where mongodb atlas refuses to connect unless I turn on cloudflare's 1.1.1.1 warp vpn
+
 the local only site should be available on `http://localhost:3000`
