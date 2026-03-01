@@ -64,7 +64,7 @@ const Page = () => {
         <Label>Enter password</Label>
         <div className="flex gap-4">
           <Input
-            type="password"
+            type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
