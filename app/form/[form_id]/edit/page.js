@@ -236,7 +236,11 @@ const Page = ({ params }) => {
     <div>
       <div className="p-10 pt-20 flex justify-between">
         <Button onClick={() => router.back()}>← Back</Button>
-        <Button onClick={handleDelete} className="ml-auto">
+        <Button
+          onClick={handleDelete}
+          className="ml-auto"
+          variant="destructive"
+        >
           Delete
         </Button>
       </div>
